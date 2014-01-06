@@ -113,6 +113,9 @@ typedef NS_ENUM(NSInteger, CAPSDataType) {
 -(NSString *)SOAPString;
 -(NSDictionary *)objectDictionary;
 
+- (NSDictionary*)dictionaryRepresentation;
+- (NSData*)JSONDataWithJSONWriteOption:(NSJSONWritingOptions)writeOption;
+- (NSString*)JSONStringWithJSONWriteOption:(NSJSONWritingOptions)writeOption;
 
 #pragma mark - New Object with properties of another Object
 -(id)initWithObject:(NSObject *)oldObject error:(NSError **)error;

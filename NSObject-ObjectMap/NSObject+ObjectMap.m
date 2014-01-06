@@ -569,15 +569,25 @@ static const char * getPropertyType(objc_property_t property) {
     return objectDict;
 }
 
+- (NSData*)JSONDataWithJSONWriteOption:(NSJSONWritingOptions)writeOption
+{
+	id dict = [NSObject jsonDataObjects:self];
+	return [NSJSONSerialization dataWithJSONObject:dict options:writeOption error:nil];
+}
+
 -(NSData *)JSONData{
-    id dict = [NSObject jsonDataObjects:self];
-    return [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+	return [self JSONDataWithJSONWriteOption:NSJSONWritingPrettyPrinted];
+}
+
+- (NSString*)JSONStringWithJSONWriteOption:(NSJSONWritingOptions)writeOption
+{
+	id dict = [NSObject jsonDataObjects:self];
+	NSData *JSONData = [NSJSONSerialization dataWithJSONObject:dict options:writeOption error:nil];
+	return [[NSString alloc] initWithData:JSONData encoding:NSUTF8StringEncoding];
 }
 
 -(NSString *)JSONString{
-    id dict = [NSObject jsonDataObjects:self];
-    NSData *JSONData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
-    return [[NSString alloc] initWithData:JSONData encoding:NSUTF8StringEncoding];
+	return [self JSONStringWithJSONWriteOption:NSJSONWritingPrettyPrinted];
 }
 
 + (id)jsonDataObjects:(id)obj {
@@ -595,6 +605,11 @@ static const char * getPropertyType(objc_property_t property) {
     }
     
     return returnProperties;
+}
+
+- (NSDictionary*)dictionaryRepresentation
+{
+	return [NSObject jsonDataObjects:self];
 }
 
 +(NSDictionary *)dictionaryWithPropertiesOfObject:(id)obj
